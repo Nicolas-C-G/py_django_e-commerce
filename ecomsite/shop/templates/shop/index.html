@@ -27,7 +27,7 @@
                             <a class="nav-link" href="#">Features</a>
                           </li>
                           <li class="nav-item">
-                            <button id="cart" data-bs-html="true" type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover">
+                            <button id="cart" data-bs-html="true" type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content=" ">
                                 Cart(0)
                             </button>  
                           </li>
@@ -105,40 +105,58 @@
 
     <script type="text/javascript">
 
-        var cartString ="";
         var cartIndex = 1;
 
         var popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 
         if (localStorage.getItem('cart')==null) {
-            var cart = {};
-            cartString += "<h5>Your cart is empty</h5>";
-            popoverTriggerList[0].setAttribute('data-bs-content',cartString);            
+            var cart = [];        
         }else{
-            cartString += "<h5>This is your cart</h5>";
             cart = JSON.parse(localStorage.getItem('cart'));
+        }
+
+        function popoverContent() {
+            document.getElementById('cart').innerHTML = "Cart ("+cart.length+")";
+            //this code generate the popover
+            var cartString =" ";
+            var cont = 1;
+            for (let x in cart) {
+                console.log(cart[x]);
+                cartString += cont + cart[x][2] + "Qty: " + cart[x][1] + "<br>"; 
+                cont++;
+            }
+            popoverTriggerList[0].setAttribute('data-bs-content',cartString);
         }
 
         $(document).on('click','.atc',function(){
             
             var item_id = this.id.toString();
+            var skip = 0;
+            var item_vec = [];
 
-            if (cart[item_id] != undefined) {
-                cart[item_id] = cart[item_id] + 1;
-            }else{
-                cart[item_id] = 1;
+            if (cart.length > 0) {
+                for (let x = 0; x < cart.length; x++) {
+                    if (cart[x][0]==item_id) {
+                        cart[x][1]= cart[x][1] + 1;
+                        skip = 1;
+                        break;
+                    }
+                }
+            }
+
+            if (skip!==1) {
+                item_vec[0] = item_id;
+                item_vec[1] = 1;
+                item_vec[2] = document.getElementById("nm"+item_id).innerHTML;
+                cart.push(item_vec);    
             }
 
             localStorage.setItem('cart', JSON.stringify(cart));
-            document.getElementById("cart").innerHTML="Cart(" + Object.keys(cart).length + ")";
             
-            //cart content
-            cartString += cartIndex;
-            cartString += document.getElementById("nm"+item_id).innerHTML + "Qty: " + cart[item_id] + "<br>";
-            cartIndex += 1;
-
-            popoverTriggerList[0].setAttribute('data-bs-content',cartString);
+            popoverContent();
         });
+
+        $(document).ready(popoverContent());
 
         var popoverList        = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
