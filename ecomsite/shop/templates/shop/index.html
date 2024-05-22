@@ -63,7 +63,7 @@
                         <div id="nm{{ product.id }}" class="card-title">
                             {{ product.title }}
                         </div>
-                        <div class="card-text">
+                        <div id="pp{{ product.id }}" class="card-text">
                             $ {{ product.price }}
                         </div>
                         <a href="/{{ product.id }}" class="btn btn-warning">View</a>
@@ -118,13 +118,16 @@
         function popoverContent() {
             document.getElementById('cart').innerHTML = "Cart ("+cart.length+")";
             //this code generate the popover
-            var cartString =" ";
+            var cartString ="<h2>This is your cart</h2>";
             var cont = 1;
+            var total = 0;
             for (let x in cart) {
                 console.log(cart[x]);
-                cartString += cont + cart[x][2] + "Qty: " + cart[x][1] + "<br>"; 
+                cartString += cont + cart[x][2] + "Qty: " + cart[x][1] + "<br>";
+                total += (parseFloat(cart[x][3])*parseInt(cart[x][1])); 
                 cont++;
             }
+            cartString += "Total: $" + total;
             popoverTriggerList[0].setAttribute('data-bs-content',cartString);
         }
 
@@ -148,6 +151,7 @@
                 item_vec[0] = item_id;
                 item_vec[1] = 1;
                 item_vec[2] = document.getElementById("nm"+item_id).innerHTML;
+                item_vec[3] = document.getElementById("pp"+item_id).innerHTML.split("$")[1].split(" ")[1].split("\n")[0];
                 cart.push(item_vec);    
             }
 
