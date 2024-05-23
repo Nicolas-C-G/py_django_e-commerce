@@ -122,13 +122,13 @@
             var cont = 1;
             var total = 0;
             for (let x in cart) {
-                console.log(cart[x]);
                 cartString += cont + cart[x][2] + "Qty: " + cart[x][1] + "<br>";
                 total += (parseFloat(cart[x][3])*parseInt(cart[x][1])); 
                 cont++;
             }
-            cartString += "Total: $" + total;
+            cartString += "Total: $" + total + "<br>" + "<a href='/checkout' class='btn btn-warning'>Checkout</a>";
             popoverTriggerList[0].setAttribute('data-bs-content',cartString);
+            //<a href='/checkout'><button class='btn btn-warning' id='checkout'>Checkout</button></a>
         }
 
         $(document).on('click','.atc',function(){
