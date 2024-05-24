@@ -10,32 +10,36 @@
     <div class="container">
         <div class="col-md-12">
             <div class="row">
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      A list item
-                      <span class="badge bg-primary rounded-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      A second list item
-                      <span class="badge bg-primary rounded-pill">2</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      A third list item
-                      <span class="badge bg-primary rounded-pill">1</span>
-                    </li>
+                <ul class="list-group" id="item_list">
                 </ul>
             </div>
         </div>
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" 
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" 
+        crossorigin="anonymous"></script>
 <script type="text/javascript">
-  if (localStorage.getItem('cart')==null) {
-    var cart = {};
-  }else{
-    cart = JSON.parse(localStorage.getItem('cart'));
+  function main() {
+    var total = 0;
+    var itemString = "";
+    var totalString = '<li class="list-group-item d-flex justify-content-between align-items-center">Total:<span class="badge bg-primary rounded-pill">$ ';
+    if (localStorage.getItem('cart')==null) {
+      var cart = {};
+    }else{
+      cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    for (item in cart) {
+      var name = cart[item][2];
+      var quantity = cart[item][1];
+      itemString += '<li class="list-group-item d-flex justify-content-between align-items-center">';
+      itemString += name + '<span class="badge bg-primary rounded-pill">' + quantity + '</span></li>';
+      total += parseFloat(cart[item][3])*parseInt(quantity);
+    }
+    totalString += total + '</span></li>';
+    itemString += totalString;
+    $('#item_list').append(itemString);  
   }
-  for (item in cart) {
-    console.log(cart[item]);
-  }
+  main();
 </script>
 </html>
