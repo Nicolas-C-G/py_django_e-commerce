@@ -28,4 +28,14 @@
         </div>
     </div>
 </body>
+<script type="text/javascript">
+  if (localStorage.getItem('cart')==null) {
+    var cart = {};
+  }else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  for (item in cart) {
+    console.log(cart[item]);
+  }
+</script>
 </html>
